@@ -16,7 +16,7 @@
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d build -m \"Automated deployment\"",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {

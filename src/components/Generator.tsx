@@ -12,7 +12,7 @@ interface GeneratorState {
 }
 
 const parseNumber = (s: string) => {
-  const n = parseInt(s, 10)
+  const n = parseFloat(s)
   if (isNaN(n)) {
     return undefined
   }
