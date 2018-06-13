@@ -1,0 +1,45 @@
+.Generator-form {
+  max-width: 900px;
+  margin: 50px auto;
+}
+
+.Generator-options {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Generator-options > div {
+  margin: 20px;
+}
+
+.Generator-image-container {
+  width: 200px;
+  text-align: center;
+  float: left;
+}
+
+.Generator-image-container canvas {
+  display: inline-block;
+  max-width: 200px;
+}
+
+.Generator-drop {
+  width: 200px;
+  height: 200px;
+  border: 4px dashed gray;
+  border-radius: 25%;
+}
+
+.Generator-image-container-control {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.Generator-output {
+  text-align: center;
+}
+
+.Generator-output canvas {
+  display: inline-block;
+  margin: 20px;
+}

@@ -1,0 +1,14 @@
+{
+  "extends": ["tslint-config-standard"],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "src/registerServiceWorker.ts"
+    ]
+  },
+  "rules": {
+    "quotemark": [true, "single", "jsx-double", "avoid-escape"],
+    "no-unused-variable": [false, "react"]
+	}
+}
