@@ -51,9 +51,7 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
   updatePreview = () => {
     if (!this.props.preview || this.dead) return
     const time = (Date.now() % this.animationSpeed) / this.animationSpeed
-    console.log(time)
     const frameIndex = Math.floor(this.slices.length * time)
-    // console.log(frameIndex)
     this.setState({ frameIndex })
 
     if (!this.dead) requestAnimationFrame(this.updatePreview)

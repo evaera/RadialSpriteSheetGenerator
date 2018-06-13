@@ -4,7 +4,8 @@
     "exclude": [
       "config/**/*.js",
       "node_modules/**/*.ts",
-      "src/registerServiceWorker.ts"
+      "src/registerServiceWorker.ts",
+      "build/**/*"
     ]
   },
   "rules": {
