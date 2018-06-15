@@ -123,8 +123,8 @@ export default class Generator extends React.Component {
               }} error={this.state.options.startAt ? (this.state.options.startAt > 180 || this.state.options.startAt < -180) : false}/>
             </Tooltip>
 
-            <Tooltip title="The increment between each slice" placement="top">
-              <TextField label="Increment" type="number" value={this.state.options.increment || ''} onChange={this.handleChange('increment', true)} inputProps={{
+            <Tooltip title="The increment between each slice. Use a negative for counter-clockwise." placement="top">
+              <TextField label="Increment" type="number" value={this.state.options.increment} onChange={this.handleChange('increment', true)} inputProps={{
                 max: 180
               }} error={this.state.options.increment ? this.state.options.increment > 180 : false}/>
             </Tooltip>

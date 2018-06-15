@@ -60,7 +60,7 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
     if (!this.dead) requestAnimationFrame(this.updatePreview)
   }
 
-  get configurationString () {
+  get configurationString (): string {
     return JSON.stringify({
       version: 1,
       size: this.imageSize,
@@ -80,12 +80,12 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
     return this._length
   }
 
-  get animationSpeed () {
+  get animationSpeed (): number {
     if (!this.props.preview) return 0
     return (this.props.preview.speed || 1) * 1000
   }
 
-  get imageSize () {
+  get imageSize (): number {
     return this.props.options.size || this.props.image.naturalHeight
   }
 
@@ -93,26 +93,36 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
     return Math.floor((this.props.options.width / this.imageSize)) * Math.floor((this.props.options.height / this.imageSize)) || 1
   }
 
-  get increment () {
-    return this.props.options.increment <= 0 ? 20 : this.props.options.increment
+  get increment (): number {
+    return this.props.options.increment
   }
 
   get slices (): Slice[] {
+    if (this.increment === 0) {
+      this._length = 1
+
+      return [{
+        startAngle: 0,
+        endAngle: 360
+      }]
+    }
+
     const steps: number[] = []
-    for (let i = this.increment; i <= 360; i += this.increment) {
+    for (let i = this.increment; (this.increment < 0 ? i >= -360 : i <= 360); i += this.increment) {
       steps.push(i)
     }
 
-    if (steps[steps.length - 1] !== 360) {
-      steps.push(360)
+    const lastStep = steps[steps.length - 1]
+    if (lastStep !== 360 && lastStep !== -360) {
+      steps.push(this.increment < 0 ? -360 : 360)
     }
 
     this._length = steps.length
 
     const startAt = (this.props.options.startAt !== undefined ? this.props.options.startAt : 0) + -90
     return steps.map((n): Slice => ({
-      startAngle: startAt,
-      endAngle: startAt + n
+      startAngle: startAt + (n < 0 ? n : 0),
+      endAngle: startAt + (n > 0 ? n : 0)
     }))
   }
 
@@ -121,7 +131,7 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
     let slices = this.slices
 
     if (this.state.frameIndex !== undefined) {
-      slices = [this.slices[this.state.frameIndex]]
+      slices = [slices[this.state.frameIndex]]
     }
 
     while (slices.length > 0) {
@@ -141,9 +151,7 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
     return (
       <React.Fragment>
         {this.props.showConfiguration && (
-          <div className="center"><textarea value={this.configurationString} readOnly cols={30} rows={4} ref="textarea" onClick={() => (this.refs.textarea as HTMLTextAreaElement).select()} style={{
-            resize: 'none'
-          }}/></div>
+          <div className="center"><textarea value={this.configurationString} readOnly cols={30} rows={4} ref="textarea" onClick={() => (this.refs.textarea as HTMLTextAreaElement).select()} /></div>
         )}
         {pages.map((page, index) => (
           <Canvas image={this.props.image} options={options} slices={page} size={this.imageSize} key={index} index={index} savable={this.props.preview === undefined} max={pages.length} />
