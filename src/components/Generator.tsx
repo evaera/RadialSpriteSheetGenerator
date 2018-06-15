@@ -113,7 +113,7 @@ export default class Generator extends React.Component {
             <Tooltip title="The size of the sprite outputted onto the sheet, in pixels." placement="top">
               <TextField label="Size" type="number" value={this.state.options.size || ''} onChange={this.handleChange('size', true)} inputProps={{
                 max: MAX_DECAL_SIZE
-              }} error={this.state.options.size ? this.state.options.size > 1024 : false}/>
+              }} error={this.state.options.size ? this.state.options.size > Math.min(this.state.options.width, this.state.options.height) : false}/>
             </Tooltip>
 
             <Tooltip title="The angle at which to start the slicing. 0 = Top" placement="top">
@@ -149,7 +149,7 @@ export default class Generator extends React.Component {
               <div>
                 <p>For use in Roblox, please see our <a href="https://github.com/evaera/RadialSpriteSheetGenerator/blob/master/README.md#use-in-roblox" target="_blank">README</a> for instructions.</p>
                 {this.state.options.width > MAX_DECAL_SIZE || this.state.options.height > MAX_DECAL_SIZE && (
-                  <p className="error">The maximum Roblox image upload size is 1024x1024.</p>
+                  <p className="error">The maximum Roblox image upload size is {MAX_DECAL_SIZE}x{MAX_DECAL_SIZE}.</p>
                 )}
               </div>
             )}
