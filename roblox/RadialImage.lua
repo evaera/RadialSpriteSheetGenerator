@@ -53,7 +53,7 @@ function RadialImage:GetFromAlpha(alpha)
   end
 
   local count, size, columns, rows = self.config.count, self.config.size, self.config.columns, self.config.rows
-  local index = math.floor(alpha * count)
+  local index = alpha >= 1 and count - 1 or math.floor(alpha * count)
   local page = math.floor(index / (columns * rows)) + 1
   local pageIndex = index - (columns * rows * (page - 1))
   local x = (pageIndex % columns) * size
@@ -77,7 +77,7 @@ function RadialImage:UpdateLabel(alpha, label)
   
   label.ImageRectSize = Vector2.new(self.config.size, self.config.size)
   label.ImageRectOffset = Vector2.new(x, y)
-  label.Image = self.config.images[page]
+  label.Image = alpha <= 0 and "" or self.config.images[page]
 end
 
 return RadialImage
