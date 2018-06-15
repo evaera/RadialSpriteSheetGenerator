@@ -1,6 +1,6 @@
 .Generator-form {
   max-width: 900px;
-  margin: 50px auto;
+  margin: 50px auto 10px;
 }
 
 .Generator-options {
@@ -8,7 +8,7 @@
   flex-wrap: wrap;
 }
 
-.Generator-options > div {
+.Generator-options > div, .Generator-options > label {
   margin: 20px;
 }
 
@@ -42,4 +42,10 @@
 .Generator-output canvas {
   display: inline-block;
   margin: 20px;
+}
+
+form > p {
+  /* width: 80%; */
+  margin: 0 auto 50px;
+  line-height: 1.5em;
 }

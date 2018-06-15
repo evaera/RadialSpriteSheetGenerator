@@ -82,15 +82,14 @@ export default class Canvas extends React.Component<CanvasProps> {
   }
 
   render () {
+    const canvas = <canvas ref="canvas" width={Math.max(this.props.options.width, this.props.size)} height={Math.max(this.props.options.height, this.props.size)} />
     return (
       <React.Fragment>
         {this.props.savable ? (
           <a href={this.state.dataURL} download={`${this.props.options.name.replace(/\..+$/, '')} #${this.props.index !== undefined ? (this.props.index + 1) : '1'} of ${this.props.max || '1'}`}>
-            <canvas ref="canvas" width={Math.max(this.props.options.width, this.props.size)} height={Math.max(this.props.options.height, this.props.size)} />
+            {canvas}
           </a>
-        ) : (
-          <canvas ref="canvas" width={Math.max(this.props.options.width, this.props.size)} height={Math.max(this.props.options.height, this.props.size)} />
-        )}
+        ) : canvas}
       </React.Fragment>
     )
   }

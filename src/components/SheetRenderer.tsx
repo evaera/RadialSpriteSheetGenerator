@@ -7,7 +7,8 @@ export interface Options {
   size?: number,
   increment: number,
   startAt?: number,
-  name: string
+  name: string,
+  roblox: boolean
 }
 
 export interface PreviewOptions {
@@ -17,7 +18,8 @@ export interface PreviewOptions {
 export interface SheetRendererProps {
   image: HTMLImageElement,
   options: Options,
-  preview?: PreviewOptions
+  preview?: PreviewOptions,
+  showConfiguration?: boolean
 }
 
 interface SheetRendererState {
@@ -26,17 +28,18 @@ interface SheetRendererState {
 export default class SheetRenderer extends React.Component<SheetRendererProps> {
   state: SheetRendererState
   private dead?: boolean
+  private _length: number
 
   constructor (props: SheetRendererProps) {
     super(props)
 
+    this._length = -1
     this.state = {}
   }
 
   componentWillReceiveProps (props: SheetRendererProps) {
     if (props.preview) {
       this.setState({ frameIndex: 0 })
-      // this.updatePreview()
     }
   }
 
@@ -55,6 +58,26 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
     this.setState({ frameIndex })
 
     if (!this.dead) requestAnimationFrame(this.updatePreview)
+  }
+
+  get configurationString () {
+    return JSON.stringify({
+      version: 1,
+      size: this.imageSize,
+      count: this.length,
+      columns: Math.floor(this.props.options.width / this.imageSize),
+      rows: Math.floor(this.props.options.height / this.imageSize),
+      images: this.props.options.roblox ? Array.apply(null, { length: (Math.ceil(this.length / this.maxSlicesPerCanvas)) })
+        .map(Number.call, Number).map((n: number) => (this.props.options.roblox ? 'rbxassetid://' : 'path/to/image') + (n + 1)) : undefined
+    })
+  }
+
+  get length (): number {
+    if (this._length === -1) {
+      this._length = this.slices.length
+    }
+
+    return this._length
   }
 
   get animationSpeed () {
@@ -84,11 +107,13 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
       steps.push(360)
     }
 
+    this._length = steps.length
+
     const startAt = (this.props.options.startAt !== undefined ? this.props.options.startAt : 0) + -90
     return steps.map((n): Slice => ({
       startAngle: startAt,
       endAngle: startAt + n
-    }))// .sort((a, b) => a.n > b.n ? 1 : -1)
+    }))
   }
 
   render () {
@@ -115,6 +140,11 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
 
     return (
       <React.Fragment>
+        {this.props.showConfiguration && (
+          <div className="center"><textarea value={this.configurationString} readOnly cols={30} rows={4} ref="textarea" onClick={() => (this.refs.textarea as HTMLTextAreaElement).select()} style={{
+            resize: 'none'
+          }}/></div>
+        )}
         {pages.map((page, index) => (
           <Canvas image={this.props.image} options={options} slices={page} size={this.imageSize} key={index} index={index} savable={this.props.preview === undefined} max={pages.length} />
         ))}
