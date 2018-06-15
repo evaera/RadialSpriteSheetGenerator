@@ -14,13 +14,16 @@ For ease of use in Roblox, a module is provided that can take in configuration t
 To get prepped, follow these instructions:
 
 1. To get the module, save it from [here](https://raw.githubusercontent.com/evaera/RadialSpriteSheetGenerator/master/roblox/RadialImage.lua) and then put it in your game as a ModuleScript.
+	1. The demo below assumes you put the module into ReplicatedStorage named "RadialImage".
 2. Use the web app to generate your sprite sheets and configuration JSON. Upload the images to Roblox.
+	1. Make sure you tick the "Use in Roblox" checkbox before copying the JSON.
 3. Modify the JSON, replacing the number part of `rbxassetid://1` with the Image ID of the first image you uploaded (and likewise for any additional images).
-4. Store the JSON in your Roblox game, either as a StringValue or a embedded in a script somewhere
-  a. The demo below assumes you put the JSON into a StringValue named "Configuration" inside the script that's running.
+4. Store the JSON in your Roblox game, either as a StringValue or embedded in a script somewhere.
+	1. The demo below assumes you put the JSON into a StringValue named "Configuration" inside the script that's running.
 
 ```lua
 -- For the purposes of this demo, the script is located inside of an ImageLabel.
+-- Make sure you update the following line to point to wherever you added the module in your game:
 local RadialImage = require(game:GetService("ReplicatedStorage"):WaitForChild("RadialImage"))
 local r = RadialImage.new(script.Configuration.Value, script.Parent)
 
