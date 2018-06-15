@@ -147,7 +147,7 @@ export default class Generator extends React.Component {
 
             {this.state.options.roblox && (
               <div>
-                <p>For use in Roblox, please see our <a href="https://github.com/evaera/RadialSpriteSheetGenerator/blob/master/README.md" target="_blank">README</a> for instructions.</p>
+                <p>For use in Roblox, please see our <a href="https://github.com/evaera/RadialSpriteSheetGenerator/blob/master/README.md#use-in-roblox" target="_blank">README</a> for instructions.</p>
                 {this.state.options.width > MAX_DECAL_SIZE || this.state.options.height > MAX_DECAL_SIZE && (
                   <p className="error">The maximum Roblox image upload size is 1024x1024.</p>
                 )}

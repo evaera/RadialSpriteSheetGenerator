@@ -13,7 +13,7 @@ For ease of use in Roblox, a module is provided that can take in configuration t
 
 To get prepped, follow these instructions:
 
-1. To get the module, save it from [here]() and then put it in your game as a ModuleScript.
+1. To get the module, save it from [here](https://raw.githubusercontent.com/evaera/RadialSpriteSheetGenerator/master/roblox/RadialImage.lua) and then put it in your game as a ModuleScript.
 2. Use the web app to generate your sprite sheets and configuration JSON. Upload the images to Roblox.
 3. Modify the JSON, replacing the number part of `rbxassetid://1` with the Image ID of the first image you uploaded (and likewise for any additional images).
 4. Store the JSON in your Roblox game, either as a StringValue or a embedded in a script somewhere
