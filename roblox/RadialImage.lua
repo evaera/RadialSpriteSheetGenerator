@@ -17,7 +17,7 @@ local ConfigurationProperties = {
 	images = "table";
 }
 
-function RadialImage.new(config, label)	
+function RadialImage.new(config, label)
 	if type(config) == "string" then
 		config = HttpService:JSONDecode(config)
 	elseif type(config) ~= "table" then
@@ -28,7 +28,7 @@ function RadialImage.new(config, label)
 		if ConfigurationProperties[k] == nil then
 			error(("Invalid property name in Radial Image configuration: %s"):format(k), 2)
 		end
-		
+
 		if type(v) ~= ConfigurationProperties[k] then
 			error(("Invalid property type %q in Radial Image configuration: must be a %s."):format(k, ConfigurationProperties[k]), 2)
 		end
@@ -37,16 +37,16 @@ function RadialImage.new(config, label)
 	if config.version ~= RadialImage._version then
 		error(("Passed configuration version does not match this module's version (which is %d)"):format(RadialImage._version), 2)
 	end
-	
+
 	local self = { config = config; label = label }
 	setmetatable(self, RadialImage)
-	
+
 	return self
 end
 
 function RadialImage:GetFromAlpha(alpha)
 	if type(alpha) ~= "number" then
-		error("Argument #1 (alpha) to GetFromAlpha must be a number.")
+		error("Argument #1 (alpha) to GetFromAlpha must be a number.", 2)
 	end
 
 	local count, size, columns, rows = self.config.count, self.config.size, self.config.columns, self.config.rows
@@ -63,7 +63,7 @@ function RadialImage:UpdateLabel(alpha, label)
 	label = label or self.label
 
 	if type(alpha) ~= "number" then
-		error("Argument #1 (alpha) to UpdateLabel must be a number.")
+		error("Argument #1 (alpha) to UpdateLabel must be a number.", 2)
 	end
 
 	if typeof(label) ~= "Instance" or not (label:IsA("ImageLabel") or label:IsA("ImageButton")) then
