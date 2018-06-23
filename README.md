@@ -8,6 +8,9 @@ This is a web app that generates radial progress indicator sprite sheets right i
 
 <https://eryn.io/RadialSpriteSheetGenerator/>
 
+## Building locally
+To build the web app locally and make changes yourself, simply clone this repository and run [`yarn`](https://yarnpkg.com/en/) to install the dependencies, then `yarn start` to start the app.
+
 ## Use in Roblox
 For ease of use in Roblox, a module is provided that can take in configuration the web app provides and can make an ImageLabel or ImageButton display your progress indicator with little work.
 
