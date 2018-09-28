@@ -31,10 +31,11 @@ export default class Generator extends React.Component {
       options: {
         width: 1024,
         height: 1024,
-        increment: 20,
-        startAt: 0,
+        angleFormula: '360 * a',
+        startAtFormula: '0',
         name: 'untitled',
-        roblox: false
+        roblox: false,
+        frames: 60
       },
       preview: {
         speed: 5
@@ -88,7 +89,7 @@ export default class Generator extends React.Component {
           }} onLoad={this.handleImageLoaded} width="200" height="200" />
         ) : '' }
         <form className="Generator-form">
-          <p>This web app can generate a sprite sheet for radial/circular progress indicators, for use in platforms or game engines that do not support clipping masks (such as Roblox). Use the preview to ensure that your output will be smooth based on your intended display speed. Lower the increment for increased fidelity, but at the cost of requiring more images.</p>
+          <p>This web app can generate a sprite sheet for radial/circular progress indicators, for use in platforms or game engines that do not support clipping masks (such as Roblox). Use the preview to ensure that your output will be smooth based on your intended display speed. Lower the increment for increased fidelity, but at the cost of requiring more images.<br /><br />See <a href="http://redhivesoftware.github.io/math-expression-evaluator/#supported-maths-symbols" target="_blank">Supported Math Symbols</a> for use in the "formula" options, in addition to "a" which is a number between 0 and 1, representing progress through the animation.</p>
           <div className="Generator-image-container">
             {this.state.image && this.state.loaded ? (
               <SheetRenderer image={this.refs.image as HTMLImageElement} options={this.state.options} preview={this.state.preview}/>
@@ -116,17 +117,23 @@ export default class Generator extends React.Component {
               }} error={this.state.options.size ? this.state.options.size > Math.min(this.state.options.width, this.state.options.height) : false}/>
             </Tooltip>
 
-            <Tooltip title="The angle at which to start the slicing. 0 = Top" placement="top">
-              <TextField label="Start at angle" type="number" value={this.state.options.startAt !== undefined ? this.state.options.startAt : ''} onChange={this.handleChange('startAt', true)} inputProps={{
-                max: 180
-
-              }} error={this.state.options.startAt ? (this.state.options.startAt > 180 || this.state.options.startAt < -180) : false}/>
+            <Tooltip title="The number of frames in the animation" placement="top">
+              <TextField label="Number of frames" type="number" value={this.state.options.frames} onChange={this.handleChange('frames', true)} inputProps={{
+                min: 1
+              }} error={this.state.options.frames ? (this.state.options.frames < 1) : false}/>
             </Tooltip>
 
-            <Tooltip title="The increment between each slice. Use a negative for counter-clockwise." placement="top">
-              <TextField label="Increment" type="number" value={this.state.options.increment} onChange={this.handleChange('increment', true)} inputProps={{
+            <Tooltip title="The angle at which to start the slicing. 0 = Top" placement="top">
+              <TextField label="Initial angle formula" type="text" value={this.state.options.startAtFormula} onChange={this.handleChange('startAtFormula')} inputProps={{
                 max: 180
-              }} error={this.state.options.increment ? this.state.options.increment > 180 : false}/>
+
+              }}/>
+            </Tooltip>
+
+            <Tooltip title="The formula that defines what angle should be used at each frame index" placement="top">
+              <TextField label="Angle formula" type="text" value={this.state.options.angleFormula} onChange={this.handleChange('angleFormula')} inputProps={{
+                max: 180
+              }} />
             </Tooltip>
 
             <Tooltip title="The sprite sheet height." placement="top">
@@ -147,7 +154,7 @@ export default class Generator extends React.Component {
 
             {this.state.options.roblox && (
               <div>
-                <p>For use in Roblox, please see our <a href="https://github.com/evaera/RadialSpriteSheetGenerator/blob/master/README.md#use-in-roblox" target="_blank">README</a> for instructions.</p>
+                <p>For use in Roblox, please see the <a href="https://github.com/evaera/RadialSpriteSheetGenerator/blob/master/README.md#use-in-roblox" target="_blank">README</a> for instructions.</p>
                 {this.state.options.width > MAX_DECAL_SIZE || this.state.options.height > MAX_DECAL_SIZE && (
                   <p className="error">The maximum Roblox image upload size is {MAX_DECAL_SIZE}x{MAX_DECAL_SIZE}.</p>
                 )}

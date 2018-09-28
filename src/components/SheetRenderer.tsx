@@ -1,14 +1,16 @@
 import * as React from 'react'
 import Canvas, { Slice } from './Canvas'
+import * as mexp from 'math-expression-evaluator'
 
 export interface Options {
   width: number,
   height: number,
-  size?: number,
-  increment: number,
-  startAt?: number,
+  angleFormula: string,
+  startAtFormula: string,
   name: string,
-  roblox: boolean
+  roblox: boolean,
+  frames: number
+  size?: number,
 }
 
 export interface PreviewOptions {
@@ -20,6 +22,15 @@ export interface SheetRendererProps {
   options: Options,
   preview?: PreviewOptions,
   showConfiguration?: boolean
+}
+
+const enum TokenType {
+  Function = 0,
+  BinaryFunction = 2,
+  Constant = 3,
+  AffixFunction = 7,
+  Function2 = 8,
+  Function3 = 12
 }
 
 interface SheetRendererState {
@@ -93,12 +104,20 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
     return Math.floor((this.props.options.width / this.imageSize)) * Math.floor((this.props.options.height / this.imageSize)) || 1
   }
 
-  get increment (): number {
-    return this.props.options.increment
+  get angleFormula (): string {
+    return this.props.options.angleFormula
+  }
+
+  get startAtFormula (): string {
+    return this.props.options.startAtFormula
+  }
+
+  get frames (): number {
+    return this.props.options.frames
   }
 
   get slices (): Slice[] {
-    if (this.increment === 0) {
+    if (!this.frames) {
       this._length = 1
 
       return [{
@@ -108,21 +127,47 @@ export default class SheetRenderer extends React.Component<SheetRendererProps> {
     }
 
     const steps: number[] = []
-    for (let i = this.increment; (this.increment < 0 ? i >= -360 : i <= 360); i += this.increment) {
-      steps.push(i)
+    const startAtAngles: number[] = []
+    const tokens: mexp.Token[] = [{
+      type: TokenType.Constant,
+      show: 'a',
+      token: 'a',
+      value: 'a'
+    }]
+    for (let frame = 1; frame <= this.frames; frame++) {
+      let stepResult = 0
+      let startAtResult = 0
+
+      try {
+        const pair = { a: frame / this.frames }
+        stepResult = mexp.eval(this.angleFormula, tokens, pair)
+        startAtResult = mexp.eval(this.startAtFormula, tokens, pair)
+      } catch (e) {
+        // do nothing
+      }
+
+      if (!isNaN(stepResult)) {
+        steps.push(stepResult)
+      }
+
+      if (!isNaN(startAtResult)) {
+        startAtAngles.push(startAtResult - 90)
+      } else {
+        startAtAngles.push(-90)
+      }
     }
 
-    const lastStep = steps[steps.length - 1]
-    if (lastStep !== 360 && lastStep !== -360) {
-      steps.push(this.increment < 0 ? -360 : 360)
-    }
+    // const lastStep = steps[steps.length - 1]
+    // if (lastStep !== 360 && lastStep !== -360) {
+    //   steps.push(this.increment < 0 ? -360 : 360)
+    // }
 
     this._length = steps.length
 
-    const startAt = (this.props.options.startAt !== undefined ? this.props.options.startAt : 0) + -90
-    return steps.map((n): Slice => ({
-      startAngle: startAt + (n < 0 ? n : 0),
-      endAngle: startAt + (n > 0 ? n : 0)
+    // const startAt = (this.props.options.startAt !== undefined ? this.props.options.startAt : 0) + -90
+    return steps.map((n, i): Slice => ({
+      startAngle: startAtAngles[i] + (n <= 0 ? n : 0),
+      endAngle: startAtAngles[i] + (n >= 0 ? n : 0)
     }))
   }
 
