@@ -54,7 +54,7 @@ function RadialImage:GetFromAlpha(alpha)
 	local page = math.floor(index / (columns * rows)) + 1
 	local pageIndex = index - (columns * rows * (page - 1))
 	local x = (pageIndex % columns) * size
-	local y = math.floor(pageIndex / rows) * size
+	local y = math.floor(pageIndex / columns) * size
 
 	return x, y, page
 end
