@@ -55,11 +55,11 @@ function RadialImage:Preload()
 	for _, image in ipairs(self.config.images) do
 		local label = self.label:Clone()
 		label.Image = image
+		label.Visible = true
+		label.Size = UDim2.new(0, 0, 0, 0)
 		label.Parent = self.label.Parent
 		table.insert(self.labels, label)
 	end
-
-	self.label.Visible = false
 
 	ContentProvider:PreloadAsync(self.labels)
 
@@ -74,8 +74,6 @@ function RadialImage:Destroy()
 	end
 
 	self.labels = nil
-
-	self.label.Visible = true
 end
 
 function RadialImage:GetFromAlpha(alpha)
@@ -94,12 +92,6 @@ function RadialImage:GetFromAlpha(alpha)
 end
 
 function RadialImage:UpdateLabel(alpha, label)
-	if self.labels then
-		for _, preloadLabel in ipairs(self.labels) do
-			preloadLabel.Visible = false
-		end
-	end
-
 	label = label or self.label
 
 	if type(alpha) ~= "number" then
@@ -112,11 +104,6 @@ function RadialImage:UpdateLabel(alpha, label)
 
 	local x, y, page = self:GetFromAlpha(alpha)
 
-	if self.labels then
-		label = self.labels[page]
-	end
-
-	label.Visible = true
 	label.ImageRectSize = Vector2.new(self.config.size, self.config.size)
 	label.ImageRectOffset = Vector2.new(x, y)
 	label.Image = alpha <= 0 and "" or self.config.images[page]
