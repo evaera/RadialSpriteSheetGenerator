@@ -1,8 +1,8 @@
-import { Button, TextField, Tooltip, FormControlLabel, Checkbox } from '@material-ui/core'
+import { Button, Checkbox, FormControlLabel, TextField, Tooltip } from '@material-ui/core'
 import * as React from 'react'
+import { MAX_DECAL_SIZE } from '../constants'
 import './Generator.css'
 import SheetRenderer, { Options, PreviewOptions } from './SheetRenderer'
-import { MAX_DECAL_SIZE } from '../constants'
 
 interface GeneratorState {
   image?: string,
@@ -89,7 +89,7 @@ export default class Generator extends React.Component {
           }} onLoad={this.handleImageLoaded} width="200" height="200" />
         ) : '' }
         <form className="Generator-form">
-          <p>This web app can generate a sprite sheet for radial/circular progress indicators, for use in platforms or game engines that do not support clipping masks (such as Roblox). Use the preview to ensure that your output will be smooth based on your intended display speed. Increase the amount of frames for increased fidelity, but at the cost of requiring more images.<br /><br />See <a href="http://redhivesoftware.github.io/math-expression-evaluator/#supported-maths-symbols" target="_blank">Supported Math Symbols</a> for use in the "formula" options, in addition to "a" which is a number between 0 and 1, representing progress through the animation.</p>
+          <p>This web app can generate a sprite sheet for radial/circular progress indicators, for use in platforms or game engines that do not support clipping masks (such as Roblox). Use the preview to ensure that your output will be smooth based on your intended display speed. Increase the amount of frames for increased fidelity, but at the cost of requiring more images.<br /><br />See <a href="http://bugwheels94.github.io/math-expression-evaluator/#supported-maths-symbols" target="_blank">Supported Math Symbols</a> for use in the "formula" options, in addition to "a" which is a number between 0 and 1, representing progress through the animation.</p>
           <div className="Generator-image-container">
             {this.state.image && this.state.loaded ? (
               <SheetRenderer image={this.refs.image as HTMLImageElement} options={this.state.options} preview={this.state.preview}/>
