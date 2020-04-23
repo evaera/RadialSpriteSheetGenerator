@@ -58,3 +58,14 @@ void RadialImage:UpdateLabel (number alpha [, <ImageLabel | ImageButton> label])
   // @param alpha A number between 0 and 1 that indicates how far along the progress is. Information for the most appropriate frame will be returned based on the number of available images in the sprite sheet.
   // @returns <number, number, number> Returns the X coordinate, Y coordinate, and the Image number for which to display based on the given alpha.
 ```
+
+
+```cs
+void RadialImage:Preload ()
+  /// Preloads the images in the given sheet and caches them in ImageLabels. You must call :Destroy() when you're done if you call :Preload()
+```
+
+```cs
+void RadialImage:Destroy ()
+  /// Destroys the cache of preloaded image labels. You only need to call this if you called Preload.
+```

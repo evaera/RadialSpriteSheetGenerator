@@ -4,6 +4,7 @@
 -- @author evaera
 
 local HttpService = game:GetService("HttpService")
+local ContentProvider = game:GetService("ContentProvider")
 
 local RadialImage = { _version = 1 }
 RadialImage.__index = RadialImage
@@ -44,6 +45,39 @@ function RadialImage.new(config, label)
 	return self
 end
 
+function RadialImage:Preload()
+	if self.label == nil then
+		error("You must provide a label to RadialImage.new to use Preload", 2)
+	end
+
+	self.labels = {}
+
+	for _, image in ipairs(self.config.images) do
+		local label = self.label:Clone()
+		label.Image = image
+		label.Parent = self.label.Parent
+		table.insert(self.labels, label)
+	end
+
+	self.label.Visible = false
+
+	ContentProvider:PreloadAsync(self.labels)
+
+	for _, label in ipairs(self.labels) do
+		label.Visible = false
+	end
+end
+
+function RadialImage:Destroy()
+	for _, label in ipairs(self.labels) do
+		label:Destroy()
+	end
+
+	self.labels = nil
+
+	self.label.Visible = true
+end
+
 function RadialImage:GetFromAlpha(alpha)
 	if type(alpha) ~= "number" then
 		error("Argument #1 (alpha) to GetFromAlpha must be a number.", 2)
@@ -60,6 +94,12 @@ function RadialImage:GetFromAlpha(alpha)
 end
 
 function RadialImage:UpdateLabel(alpha, label)
+	if self.labels then
+		for _, preloadLabel in ipairs(self.labels) do
+			preloadLabel.Visible = false
+		end
+	end
+
 	label = label or self.label
 
 	if type(alpha) ~= "number" then
@@ -72,6 +112,11 @@ function RadialImage:UpdateLabel(alpha, label)
 
 	local x, y, page = self:GetFromAlpha(alpha)
 
+	if self.labels then
+		label = self.labels[page]
+	end
+
+	label.Visible = true
 	label.ImageRectSize = Vector2.new(self.config.size, self.config.size)
 	label.ImageRectOffset = Vector2.new(x, y)
 	label.Image = alpha <= 0 and "" or self.config.images[page]
