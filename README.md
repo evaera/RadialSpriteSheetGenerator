@@ -63,6 +63,7 @@ void RadialImage:UpdateLabel (number alpha [, <ImageLabel | ImageButton> label])
 ```cs
 void RadialImage:Preload ()
   /// Preloads the images in the given sheet and caches them in ImageLabels. You must call :Destroy() when you're done if you call :Preload()
+  // NOTE: Make sure your script isn't inside the label because your label will be cloned.
 ```
 
 ```cs
